@@ -11,7 +11,7 @@ if (!function_exists('factory')) {
      */
     function factory()
     {
-        $factory = app(EloquentFactory::class);
+        $factory = app(Factory::class);
 
         $arguments = func_get_args();
 
