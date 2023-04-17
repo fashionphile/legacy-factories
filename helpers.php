@@ -2,22 +2,25 @@
 
 use Illuminate\Database\Eloquent\Factory;
 
-if (! function_exists('factory')) {
+if (!function_exists('factory')) {
     /**
-     * Create a model factory builder for a given class and amount.
+     * Create a model factory builder for a given class, name, and amount.
      *
-     * @param  string  $class
-     * @param  int  $amount
+     * @param  dynamic  class|class,name|class,amount|class,name,amount
      * @return \Illuminate\Database\Eloquent\FactoryBuilder
      */
-    function factory($class, $amount = null)
+    function factory()
     {
-        $factory = app(Factory::class);
+        $factory = app(EloquentFactory::class);
 
-        if (isset($amount) && is_int($amount)) {
-            return $factory->of($class)->times($amount);
+        $arguments = func_get_args();
+
+        if (isset($arguments[1]) && is_string($arguments[1])) {
+            return $factory->of($arguments[0], $arguments[1])->times($arguments[2] ?? null);
+        } elseif (isset($arguments[1])) {
+            return $factory->of($arguments[0])->times($arguments[1]);
         }
 
-        return $factory->of($class);
+        return $factory->of($arguments[0]);
     }
 }
